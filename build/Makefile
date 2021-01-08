@@ -150,33 +150,6 @@ src/PID.cpp.s:
 	$(MAKE) -f CMakeFiles/pid.dir/build.make CMakeFiles/pid.dir/src/PID.cpp.s
 .PHONY : src/PID.cpp.s
 
-src/Twiddle.o: src/Twiddle.cpp.o
-
-.PHONY : src/Twiddle.o
-
-# target to build an object file
-src/Twiddle.cpp.o:
-	$(MAKE) -f CMakeFiles/pid.dir/build.make CMakeFiles/pid.dir/src/Twiddle.cpp.o
-.PHONY : src/Twiddle.cpp.o
-
-src/Twiddle.i: src/Twiddle.cpp.i
-
-.PHONY : src/Twiddle.i
-
-# target to preprocess a source file
-src/Twiddle.cpp.i:
-	$(MAKE) -f CMakeFiles/pid.dir/build.make CMakeFiles/pid.dir/src/Twiddle.cpp.i
-.PHONY : src/Twiddle.cpp.i
-
-src/Twiddle.s: src/Twiddle.cpp.s
-
-.PHONY : src/Twiddle.s
-
-# target to generate assembly for a file
-src/Twiddle.cpp.s:
-	$(MAKE) -f CMakeFiles/pid.dir/build.make CMakeFiles/pid.dir/src/Twiddle.cpp.s
-.PHONY : src/Twiddle.cpp.s
-
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -216,9 +189,6 @@ help:
 	@echo "... src/PID.o"
 	@echo "... src/PID.i"
 	@echo "... src/PID.s"
-	@echo "... src/Twiddle.o"
-	@echo "... src/Twiddle.i"
-	@echo "... src/Twiddle.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

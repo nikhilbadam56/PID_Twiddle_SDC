@@ -4,9 +4,11 @@
 #include <string>
 #include "json.hpp"
 #include "PID.h"
-#include <ctime>
-#include "Twiddle.h"
-
+#include <stdio.h>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/time.h>
 
 // for convenience
 using nlohmann::json;
@@ -51,6 +53,40 @@ void run_car(uWS::WebSocket<uWS::SERVER> &ws,PID &pid,double cte,double prev_ste
   
 }
 
+void changemode(int);
+int    kbhit(void);
+
+void changemode(int dir)
+{
+  static struct termios oldt, newt;
+
+  if ( dir == 1 )
+  {
+    tcgetattr( STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+  }
+  else
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
+}
+
+int kbhit (void)
+{
+  struct timeval tv;
+  fd_set rdfs;
+
+  tv.tv_sec = 0;
+  tv.tv_usec = 0;
+
+  FD_ZERO(&rdfs);
+  FD_SET (STDIN_FILENO, &rdfs);
+
+  select(STDIN_FILENO+1, &rdfs, NULL, NULL, &tv);
+  return FD_ISSET(STDIN_FILENO, &rdfs);
+
+}
+
 void reset(uWS::WebSocket<uWS::SERVER> ws)
 {
   string msg = "42[\"reset\",{}]";
@@ -69,8 +105,6 @@ int main()
   //initializing the pid variables 
   // pid.Init(); //initial p values
   
-  // Twiddle t(pid);
-
   double total_error = 0.0;
   int timesteps = 0;
   
@@ -79,6 +113,8 @@ int main()
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
+
+    std::cout<<"onmessage"<<std::endl;
 
     if (length && length > 2 && data[0] == '4' && data[1] == '2')
     {
@@ -96,6 +132,7 @@ int main()
           double cte = std::stod(j[1]["cte"].get<string>());
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
+  std::cout<<"[--------------------]{On Message} CTE"<<cte<<std::endl;  
           /**
            * TODO: Calculate steering value here, remember the steering value is
            *   [-1, 1].
@@ -103,6 +140,40 @@ int main()
            *   Maybe use another PID controller to control the speed!
            */
           // std::cout<<timesteps<<std::endl;
+          char ch; 
+        changemode(1);
+        if ( kbhit() )
+        {
+          ch = getchar();
+            printf("%c\tFrom: P: %2.2f\tI: %f\tD:%2.2f", ch, pid.p[0] , pid.p[2], pid.p[1]);
+            switch (ch){
+                case 'P':
+                    pid.p[0] += pid.p[0]*0.1; // Or += 0.01; 
+                    break;
+                case 'p':
+                    pid.p[0] -= pid.p[0]*0.1; // Or -= 0.01;
+                    break;
+                case 'I':
+                    pid.p[2] += pid.p[2]*0.1; // Or += 0.001; 
+                    break;
+                case 'i':
+                    pid.p[2] -= pid.p[2]*0.1; // Or -= 0.001; 
+                    break;
+                case 'D':
+                    pid.p[1] += pid.p[1]*0.1; // Or += 0.1; 
+                    break;
+                case 'd':
+                    pid.p[1] -= pid.p[1]*0.1; // Or -=0.1;
+                    break;
+                case 't':
+                    std::cout<<"Activating Twiddle----------------------------"<<std::endl;
+                    pid.is_twiddle = true;
+                    std::cout<<"Running On Twiddle-----------------------------"<<std::endl;
+                    break;
+            }
+            printf("\tto: P: %2.2f\tI: %f\tD:%2.2f\n", pid.p[0] , pid.p[2], pid.p[1]);
+        }
+        changemode(0);
           run_car(ws,pid,cte,angle); 
           if(pid.is_twiddle)
           {

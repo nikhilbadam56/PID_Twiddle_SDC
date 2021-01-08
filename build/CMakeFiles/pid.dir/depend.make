@@ -4,12 +4,7 @@
 CMakeFiles/pid.dir/src/PID.cpp.o: ../src/PID.cpp
 CMakeFiles/pid.dir/src/PID.cpp.o: ../src/PID.h
 
-CMakeFiles/pid.dir/src/Twiddle.cpp.o: ../src/PID.h
-CMakeFiles/pid.dir/src/Twiddle.cpp.o: ../src/Twiddle.cpp
-CMakeFiles/pid.dir/src/Twiddle.cpp.o: ../src/Twiddle.h
-
 CMakeFiles/pid.dir/src/main.cpp.o: ../src/PID.h
-CMakeFiles/pid.dir/src/main.cpp.o: ../src/Twiddle.h
 CMakeFiles/pid.dir/src/main.cpp.o: ../src/json.hpp
 CMakeFiles/pid.dir/src/main.cpp.o: ../src/main.cpp
 

@@ -40,7 +40,7 @@ class PID {
   //results in a smooth function overall
   //a small value to the i component decreases the steady state error.
 
-  std::vector<double> p {0.084,2.4,0.0005}; //pdi  
+  std::vector<double> p {0.06,2.01,0.0007}; //pdi  
   double previous_error = 0;
 
   bool is_twiddle  = false;
