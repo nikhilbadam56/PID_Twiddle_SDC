@@ -1,6 +1,5 @@
-# CarND-Controls-PID
+# PID Controller Project SDC
 Self-Driving Car Engineer Nanodegree Program
-
 ---
 
 ## Dependencies
@@ -35,64 +34,68 @@ Fellow students have put together a guide to Windows set-up for the project [her
 3. Compile: `cmake .. && make`
 4. Run it: `./pid`. 
 
-Tips for setting up your environment can be found [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
+## Overview
 
-## Editor Settings
+“PID Controller SDC” , this project involves to code a PID system for controlling(atleast) the
+control variable “steering angle” based on the input “Cross Track Error” which basically is
+the amount of distance between the center of the lane and the centroid of the box model
+of car in simulation.
+Initial values of PID parameters are set manually by individually varying parameters, then
+used twiddle optimization algorithm for about 5 iterations each with a step size of 300 to
+optimize the manually obtained parameters.
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+## Goals
 
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
+1. To code PID algorithms from scratch in CPP.
+2. To code Twiddle algorithm.
+3. To make a car in a simulation maneuver around the track using a PID controller.
 
-## Code Style
+## Brief
 
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
+```
+● “PID controller” stands for proportional , Integral,derivative controller. Proportional
+part takes the cross track error and changes the control variable ,here steering
+angle, proportional to the amount of cross track error. This is good for small value
+of errors , but for large values of eros system tend to overshoot , this makes the
+object , here car , go off the track or desired value it intended to achieve. Following
+video shows the output of controller with only P parameter set , to value 0.05.
+```
+[![](http://img.youtube.com/vi/64YmirDHZJw/0.jpg)](https://youtu.be/64YmirDHZJw)
 
-## Project Instructions and Rubric
+```
+● When only the p-controller is set, the system oscillates vigorously about the
+desired value i.e., center of the lane. In order to kill this behaviour and make
+the response die out as we progress we use a Derivative part of the
+controller. This works like a feedback , gives the system a memory about the
+performance of the system in previous timestep and thereby controls
+present behaviour. We approximate this derivative by a first order difference
+equation with assumption of time gap 1 second. Following video shows the
+output response of the system when both P parameter and D parameter are
+set , and also I have set a very small value to the I parameter , this decreases
+the steady state error , this accumulates overall previous error (integration)
+and changes the output response.
+P parameter : 0.
+D parameter : 1.
+I parameter : 0.
+```
+[![](http://img.youtube.com/vi/vDEouoN_UHI/0.jpg)](https://youtu.be/vDEouoN_UHI)
+Link to the video showing the output response of over all PID controller.
 
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
-
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/e8235395-22dd-4b87-88e0-d108c5e5bbf4/concepts/6a4d8d42-6a04-4aa6-b284-1697c0fd6562)
-for instructions and the project rubric.
-
-## Hints!
-
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
-
-## Call for IDE Profiles Pull Requests
-
-Help your fellow students!
-
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
-
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
-
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
-
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
-
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
-
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
-
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+```
+● Now we got a good set of PID parameter values , but in order to still refine
+the output we could still refine the parameters i.e., optimizing the
+parameters , for this kind of task we generally use optimization algorithms
+like gradient descent , Twiddle algorithm , Stochastic Gradient descent etc.
+For them to perform better we generally set a good initial value to the
+parameters , this is done to achieve optimized values fastly that is with good
+initialization we restrict search space. For this project I have a twiddle
+algorithm for optimization tasks. I have run twiddle algorithm for 5 iterations
+and obtained optimized PID parameters are
+P parameter : 0.
+D parameter : 2.
+I Parameter : 0.
+```
+(NOTE: even though i have run the twiddle for 5 iteration , i have achieved above
+values in 3 iterations , remaining iteration only made things oscillatory).
+[![](http://img.youtube.com/vi/iYE36Rv70K8/0.jpg)](https://youtu.be/iYE36Rv70K8)
 
