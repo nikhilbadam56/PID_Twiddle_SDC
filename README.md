@@ -79,8 +79,6 @@ D parameter : 1.
 I parameter : 0.
 ```
 [![](http://img.youtube.com/vi/vDEouoN_UHI/0.jpg)](https://youtu.be/vDEouoN_UHI)
-Link to the video showing the output response of over all PID controller.
-
 ```
 ● Now we got a good set of PID parameter values , but in order to still refine
 the output we could still refine the parameters i.e., optimizing the
@@ -97,5 +95,6 @@ I Parameter : 0.
 ```
 (NOTE: even though i have run the twiddle for 5 iteration , i have achieved above
 values in 3 iterations , remaining iteration only made things oscillatory).
-[![](http://img.youtube.com/vi/iYE36Rv70K8/0.jpg)](https://youtu.be/iYE36Rv70K8)
 
+
+[![](http://img.youtube.com/vi/iYE36Rv70K8/0.jpg)](https://youtu.be/iYE36Rv70K8)
